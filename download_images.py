@@ -11,7 +11,7 @@ import neopixel
 # Google Drive API Setup
 SCOPES = ['https://www.googleapis.com/auth/drive']
 SERVICE_ACCOUNT_FILE = 'credentials.json'
-FOLDER_ID = '1Dhyhu61ndmV5r1CqGvNPXBzHXvoPFlt3'
+FOLDER_ID = '1j6tBoQwV8kwOonj7ZIzlM4vVGo1toJxmcy19ZDc6R5OUCR7wDwMrukglvU3LharGgOAn2gt1'
 
 # WS2812B LED Setup
 LED_PIN = board.D18
