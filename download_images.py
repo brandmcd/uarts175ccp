@@ -103,5 +103,5 @@ def handle_images():
 if __name__ == "__main__":
     while True:
         handle_images()
-        print("Checking for new images in 5 minutes...")
-        time.sleep(300)
+        print("Checking for new images in 30 seconds...")
+        time.sleep(30)
