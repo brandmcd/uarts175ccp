@@ -19,35 +19,14 @@ def resize_image(img, max_width, max_height):
 def display_slideshow(directory):
     root = tk.Tk()
 
-    # Get primary screen dimensions
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
+    # Use the virtual screen size (combined size of both monitors)
+    screen_width = root.winfo_vrootwidth()
+    screen_height = root.winfo_vrootheight()
 
-    # Get virtual screen dimensions
-    virtual_screen_width = root.winfo_vrootwidth()
-    virtual_screen_height = root.winfo_vrootheight()
+    print(f"Using Virtual Screen Size: {screen_width}x{screen_height}")
 
-    print(f"Primary Screen: {screen_width}x{screen_height}")
-    print(f"Virtual Screen: {virtual_screen_width}x{virtual_screen_height}")
-
-    # Calculate Monitor 2's position and size
-    if virtual_screen_width > screen_width:
-        second_monitor_width = virtual_screen_width - screen_width
-        x_offset = screen_width
-        print(f"Detected Monitor 2 at: x={x_offset}, width={second_monitor_width}")
-    else:
-        print("No second monitor detected. Displaying on primary monitor.")
-        second_monitor_width = screen_width
-        x_offset = 0
-
-    # Set the window size to match the second monitor and center it
-    window_width = min(second_monitor_width, screen_width)
-    window_height = screen_height
-    centered_x = x_offset + (second_monitor_width - window_width) // 2
-    centered_y = (screen_height - window_height) // 2
-
-    print(f"Centering window on Monitor 2 at: {centered_x}, {centered_y}")
-    root.geometry(f"{window_width}x{window_height}+{centered_x}+{centered_y}")
+    # Centering the window on the virtual screen
+    root.geometry(f"{screen_width}x{screen_height}+0+0")
 
     label = tk.Label(root)
     label.pack()
@@ -57,16 +36,20 @@ def display_slideshow(directory):
         if images:
             for img_file in images:
                 img_path = os.path.join(directory, img_file)
-                img = Image.open(img_path)
-                img = resize_image(img, window_width, window_height)
 
-                photo = ImageTk.PhotoImage(img)
-                label.config(image=photo)
-                label.image = photo
-                root.update_idletasks()
-                root.update()
-                print(f"Displaying: {img_file}")
-                root.after(5000)  # Display each image for 5 seconds
+                try:
+                    img = Image.open(img_path)
+                    img = resize_image(img, screen_width, screen_height)
+
+                    photo = ImageTk.PhotoImage(img)
+                    label.config(image=photo)
+                    label.image = photo
+                    root.update_idletasks()
+                    root.update()
+                    print(f"Displaying: {img_file}")
+                    root.after(5000)  # Show for 5 seconds
+                except Exception as e:
+                    print(f"Error displaying {img_file}: {e}")
         else:
             print("No images to display.")
         root.after(30000)
