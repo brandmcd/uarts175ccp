@@ -47,7 +47,7 @@ env DISPLAY=:0 python display.py &
 
 # Start Monitor 2 slideshow
 echo "Starting slideshow on Monitor 2..."
-env DISPLAY=:0.1 python slideshow.py &
+env DISPLAY=:0 python slideshow.py &
 
 echo "Project is running. Press Ctrl+C to stop."
 
