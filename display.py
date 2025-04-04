@@ -3,13 +3,19 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 def resize_image(img, max_width, max_height):
+    """Resize the image while maintaining aspect ratio."""
     img_width, img_height = img.size
+
+    # Calculate the aspect ratio
     aspect_ratio = img_width / img_height
 
+    # Adjust to fit within max dimensions
     if img_width / max_width > img_height / max_height:
+        # Fit to width
         new_width = max_width
         new_height = int(max_width / aspect_ratio)
     else:
+        # Fit to height
         new_height = max_height
         new_width = int(max_height * aspect_ratio)
 
