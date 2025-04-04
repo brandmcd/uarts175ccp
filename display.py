@@ -5,17 +5,12 @@ from PIL import Image, ImageTk
 def resize_image(img, max_width, max_height):
     """Resize the image while maintaining aspect ratio."""
     img_width, img_height = img.size
-
-    # Calculate the aspect ratio
     aspect_ratio = img_width / img_height
 
-    # Adjust to fit within max dimensions
     if img_width / max_width > img_height / max_height:
-        # Fit to width
         new_width = max_width
         new_height = int(max_width / aspect_ratio)
     else:
-        # Fit to height
         new_height = max_height
         new_width = int(max_height * aspect_ratio)
 
@@ -23,10 +18,14 @@ def resize_image(img, max_width, max_height):
 
 def display_images(directory):
     root = tk.Tk()
-    screen_width = root.winfo_vrootwidth()
+    virtual_width = root.winfo_vrootwidth()
     screen_height = root.winfo_vrootheight()
 
-    root.geometry(f"{screen_width}x{screen_height}+0+0")
+    monitor_width = virtual_width // 2
+    x_offset = 0  # Left screen
+    y_offset = 0
+
+    root.geometry(f"{monitor_width}x{screen_height}+{x_offset}+{y_offset}")
     label = tk.Label(root)
     label.pack()
 
@@ -38,7 +37,7 @@ def display_images(directory):
             img_path = os.path.join(directory, files[0])
             try:
                 img = Image.open(img_path)
-                img = resize_image(img, screen_width, screen_height)
+                img = resize_image(img, monitor_width, screen_height)
                 photo = ImageTk.PhotoImage(img)
                 label.config(image=photo)
                 label.image = photo
