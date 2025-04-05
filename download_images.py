@@ -140,4 +140,4 @@ def handle_images():
 if __name__ == "__main__":
     while True:
         handle_images()
-        time.sleep(25)
+        time.sleep(20)
