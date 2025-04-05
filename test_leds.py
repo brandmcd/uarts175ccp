@@ -6,32 +6,28 @@ import neopixel
 # LED setup
 LED_PIN = board.D18
 NUM_LEDS = 60
-BRIGHTNESS_SCALE = 0.2  # Adjust this between 0.0 and 1.0 to control actual output brightness
-pixels = neopixel.NeoPixel(LED_PIN, NUM_LEDS, auto_write=False)
-
-def apply_brightness(color, scale):
-    return tuple(int(c * scale) for c in color)
+BRIGHTNESS = 0.5
+pixels = neopixel.NeoPixel(LED_PIN, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
 
 def clear_leds():
     pixels.fill((0, 0, 0))
     pixels.show()
 
-def rainbow_wheel(pos, scale=1.0):
+def rainbow_wheel(pos):
     if pos < 85:
-        color = (255 - pos * 3, pos * 3, 0)
+        return (255 - pos * 3, pos * 3, 0)
     elif pos < 170:
         pos -= 85
-        color = (0, 255 - pos * 3, pos * 3)
+        return (0, 255 - pos * 3, pos * 3)
     else:
         pos -= 170
-        color = (pos * 3, 0, 255 - pos * 3)
-    return apply_brightness(color, scale)
+        return (pos * 3, 0, 255 - pos * 3)
 
 def rainbow_gradient(duration=15):
     start_time = time.time()
     while time.time() - start_time < duration:
         for i in range(NUM_LEDS):
-            color = rainbow_wheel((i * 256) // NUM_LEDS, BRIGHTNESS_SCALE)
+            color = rainbow_wheel((i * 256) // NUM_LEDS)
             pixels[i] = color
         pixels.show()
         time.sleep(0.05)
@@ -39,56 +35,44 @@ def rainbow_gradient(duration=15):
 
 def fade_out(steps=60):
     for step in range(steps, -1, -1):
-        factor = step / steps
+        brightness = step / steps
         for i in range(NUM_LEDS):
             r, g, b = pixels[i]
-            pixels[i] = (int(r * factor), int(g * factor), int(b * factor))
+            pixels[i] = (int(r * brightness), int(g * brightness), int(b * brightness))
         pixels.show()
         time.sleep(0.05)
     clear_leds()
 
 def remembered_animation():
-    white = apply_brightness((255, 255, 255), BRIGHTNESS_SCALE)
     for i in range(NUM_LEDS):
-        pixels[i] = white
+        pixels[i] = (100, 100, 0)
         pixels.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
     rainbow_gradient()
 
 def forgotten_animation():
-    white = apply_brightness((255, 255, 255), BRIGHTNESS_SCALE)
-    red = apply_brightness((255, 0, 0), BRIGHTNESS_SCALE)
     end_index = random.randint(30, 50)
     for i in range(end_index):
-        pixels[i] = white
+        pixels[i] = (100, 100, 0)
         pixels.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
     time.sleep(0.5)
     for i in reversed(range(end_index)):
-        pixels[i] = red
+        pixels[i] = (255, 0, 0)
         pixels.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
     time.sleep(0.5)
     clear_leds()
 
 if __name__ == "__main__":
-    BRIGHTNESS_SCALE = 0.5
     print("Choose animation to test:")
     print("1 - Remembered (chase + rainbow)")
     print("2 - Forgotten (chase to point + red return)")
-    print("3 - Set brightness scale")
-    choice = input("Enter 1, 2, or 3: ")
+    choice = input("Enter 1 or 2: ")
 
     if choice == "1":
         remembered_animation()
     elif choice == "2":
         forgotten_animation()
-    elif choice == "3":
-        scale_input = float(input("Enter brightness scale (0.0 to 1.0): "))
-        if 0.0 <= scale_input <= 1.0:
-            BRIGHTNESS_SCALE = scale_input
-            print(f"Brightness scale set to {BRIGHTNESS_SCALE}. Now re-run the animation.")
-        else:
-            print("Invalid brightness scale. Must be between 0.0 and 1.0.")
     else:
         print("Invalid choice.")
