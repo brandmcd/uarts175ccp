@@ -75,13 +75,16 @@ def rainbow_wheel(pos):
 
 def rainbow_gradient(duration=15):
     start_time = time.time()
+    offset = 0
     while time.time() - start_time < duration:
         for i in range(NUM_LEDS):
-            color = rainbow_wheel((i * 256) // NUM_LEDS)
+            color = rainbow_wheel((i * 256 // NUM_LEDS + offset) % 256)
             pixels[i] = color
         pixels.show()
         time.sleep(0.05)
+        offset = (offset + 1) % 256
     fade_out()
+
 
 def fade_out(steps=60):
     for step in range(steps, -1, -1):
@@ -98,6 +101,7 @@ def remembered_animation():
         pixels[i] = (100, 100, 0)
         pixels.show()
         time.sleep(0.1)
+    time.sleep(1)
     rainbow_gradient()
 
 def handle_images():
