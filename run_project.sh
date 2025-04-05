@@ -9,6 +9,26 @@ export GOOGLE_DRIVE_FOLDER_ID=1j6tBoQwV8kwOonj7ZIzlM4vVGo1toJxmcy19ZDc6R5OUCR7wD
 echo "Activating virtual environment..."
 source venv/bin/activate
 
+# Install required Python packages
+echo "Installing Python dependencies..."
+pip install --upgrade pip
+pip install \
+  adafruit-blinka \
+  rpi_ws281x \
+  adafruit-circuitpython-neopixel \
+  google-api-python-client \
+  google-auth \
+  google-auth-httplib2 \
+  google-auth-oauthlib \
+  pillow \
+  pyheif \
+  pyheif-pillow-opener
+
+# Install system-level dependencies for HEIC and X support
+echo "Installing system packages..."
+sudo apt-get update
+sudo apt-get install -y libheif-dev libffi-dev libjpeg-dev libopenjp2-7 libtiff5
+
 # Ensure X server is running
 echo "Checking if X server is running..."
 if ! pgrep -x "Xorg" > /dev/null && ! pgrep -x "Xwayland" > /dev/null; then
