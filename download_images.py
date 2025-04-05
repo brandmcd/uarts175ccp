@@ -54,7 +54,7 @@ def forgotten_animation():
     for i in range(end_index):
         pixels[i] = (100, 100, 0)
         pixels.show()
-        time.sleep(0.1)
+        time.sleep(0.2)
     time.sleep(0.5)
     for i in reversed(range(end_index)):
         pixels[i] = (255, 0, 0)
@@ -129,15 +129,15 @@ def handle_images():
             else:
                 dst = os.path.join(monitor2_path, prev_file)
                 print(f"Moved {prev_file} to Monitor 2")
-                time.sleep(1)
                 remembered_animation()
             os.rename(src, dst)
 
         # Download new image to monitor1
         download_image(service, file_id, file_name, monitor1_path)
         print(f"Downloaded {file_name} to Monitor 1")
-        handle_images()  # Only handle one new image per cycle
+        break  # Only handle one new image per cycle
 
 if __name__ == "__main__":
     while True:
         handle_images()
+        time.sleep(25)
