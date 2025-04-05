@@ -54,7 +54,7 @@ def forgotten_animation():
     for i in range(end_index):
         pixels[i] = (100, 100, 0)
         pixels.show()
-        time.sleep(0.2)
+        time.sleep(0.1)
     time.sleep(0.5)
     for i in reversed(range(end_index)):
         pixels[i] = (255, 0, 0)
