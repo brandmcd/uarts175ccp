@@ -33,7 +33,7 @@ def rainbow_gradient(duration=15):
         time.sleep(0.05)
     fade_out()
 
-def fade_out(steps=30):
+def fade_out(steps=60):
     for step in range(steps, -1, -1):
         brightness = step / steps
         for i in range(NUM_LEDS):
@@ -47,8 +47,7 @@ def remembered_animation():
     for i in range(NUM_LEDS):
         pixels[i] = (255, 255, 255)
         pixels.show()
-        time.sleep(0.02)
-        pixels[i] = (0, 0, 0)
+        time.sleep(0.1)
     rainbow_gradient()
 
 def forgotten_animation():
@@ -56,12 +55,12 @@ def forgotten_animation():
     for i in range(end_index):
         pixels[i] = (255, 255, 255)
         pixels.show()
-        time.sleep(0.02)
+        time.sleep(0.1)
     time.sleep(0.5)
     for i in reversed(range(end_index)):
         pixels[i] = (255, 0, 0)
         pixels.show()
-        time.sleep(0.02)
+        time.sleep(0.1)
     time.sleep(0.5)
     clear_leds()
 
