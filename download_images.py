@@ -52,12 +52,12 @@ def clear_leds():
 def forgotten_animation():
     end_index = random.randint(30, 50)
     for i in range(end_index):
-        pixels[i] = (255, 255, 255)
+        pixels[i] = (160, 160, 160)
         pixels.show()
         time.sleep(0.1)
     time.sleep(0.5)
     for i in reversed(range(end_index)):
-        pixels[i] = (255, 0, 0)
+        pixels[i] = (160, 0, 0)
         pixels.show()
         time.sleep(0.1)
     time.sleep(0.5)
@@ -95,7 +95,7 @@ def fade_out(steps=60):
 
 def remembered_animation():
     for i in range(NUM_LEDS):
-        pixels[i] = (255, 255, 255)
+        pixels[i] = (160, 160, 160)
         pixels.show()
         time.sleep(0.1)
     rainbow_gradient()
