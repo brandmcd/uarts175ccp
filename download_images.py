@@ -15,19 +15,15 @@ FOLDER_ID = '1j6tBoQwV8kwOonj7ZIzlM4vVGo1toJxmcy19ZDc6R5OUCR7wDwMrukglvU3LharGgO
 
 # LED setup
 LED_PIN = board.D18
-NUM_LEDS = 30
-BRIGHTNESS = 0.5
-pixels = neopixel.NeoPixel(LED_PIN, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
+NUM_LEDS = 60
+BRIGHTNESS_SCALE = 0.3  # Adjustable scale for actual brightness control
+pixels = neopixel.NeoPixel(LED_PIN, NUM_LEDS, auto_write=False)
 
-monitor1_path = './images/monitor1'
-monitor2_path = './images/monitor2'
-forgotten_path = './images/forgotten'
+def apply_brightness(color, scale):
+    return tuple(int(c * scale) for c in color)
 
-def set_brightness(brightness):
-    """Set the brightness of the LEDs."""
-    global pixels
-    brightness = max(0.0, min(1.0, brightness))  # Clamp brightness between 0.0 and 1.0
-    pixels.brightness = brightness
+def clear_leds():
+    pixels.fill((0, 0, 0))
     pixels.show()
 
 def safe_filename(name):
@@ -52,39 +48,22 @@ def download_image(service, file_id, file_name, path):
         while not done:
             status, done = downloader.next_chunk()
 
-def clear_leds():
-    pixels.fill((0, 0, 0))
-    pixels.show()
-
-def forgotten_animation():
-    end_index = random.randint(30, 50)
-    for i in range(end_index):
-        pixels[i] = (255, 255, 255)
-        pixels.show()
-        time.sleep(0.1)
-    time.sleep(0.5)
-    for i in reversed(range(end_index)):
-        pixels[i] = (255, 0, 0)
-        pixels.show()
-        time.sleep(0.1)
-    time.sleep(0.5)
-    clear_leds()
-
-def rainbow_wheel(pos):
+def rainbow_wheel(pos, scale=1.0):
     if pos < 85:
-        return (255 - pos * 3, pos * 3, 0)
+        color = (255 - pos * 3, pos * 3, 0)
     elif pos < 170:
         pos -= 85
-        return (0, 255 - pos * 3, pos * 3)
+        color = (0, 255 - pos * 3, pos * 3)
     else:
         pos -= 170
-        return (pos * 3, 0, 255 - pos * 3)
+        color = (pos * 3, 0, 255 - pos * 3)
+    return apply_brightness(color, scale)
 
 def rainbow_gradient(duration=15):
     start_time = time.time()
     while time.time() - start_time < duration:
         for i in range(NUM_LEDS):
-            color = rainbow_wheel((i * 256) // NUM_LEDS)
+            color = rainbow_wheel((i * 256) // NUM_LEDS, BRIGHTNESS_SCALE)
             pixels[i] = color
         pixels.show()
         time.sleep(0.05)
@@ -101,11 +80,32 @@ def fade_out(steps=60):
     clear_leds()
 
 def remembered_animation():
+    white = apply_brightness((255, 255, 255), BRIGHTNESS_SCALE)
     for i in range(NUM_LEDS):
-        pixels[i] = (255, 255, 255)
+        pixels[i] = white
         pixels.show()
-        time.sleep(0.1)
+        time.sleep(0.05)
     rainbow_gradient()
+
+def forgotten_animation():
+    white = apply_brightness((255, 255, 255), BRIGHTNESS_SCALE)
+    red = apply_brightness((255, 0, 0), BRIGHTNESS_SCALE)
+    end_index = random.randint(30, 50)
+    for i in range(end_index):
+        pixels[i] = white
+        pixels.show()
+        time.sleep(0.05)
+    time.sleep(0.5)
+    for i in reversed(range(end_index)):
+        pixels[i] = red
+        pixels.show()
+        time.sleep(0.05)
+    time.sleep(0.5)
+    clear_leds()
+
+monitor1_path = './images/monitor1'
+monitor2_path = './images/monitor2'
+forgotten_path = './images/forgotten'
 
 def handle_images():
     service = authenticate_drive()
@@ -141,7 +141,7 @@ def handle_images():
         break  # Only handle one new image per cycle
 
 if __name__ == "__main__":
-    set_brightness(0.5)
+    print(f"Starting download_images.py with BRIGHTNESS_SCALE = {BRIGHTNESS_SCALE}")
     while True:
         handle_images()
         print("Checking for new images in 30 seconds...")
