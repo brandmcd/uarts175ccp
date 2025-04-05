@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/home/brandmcd/image-hosting/download_images.py", line 138, in <module>
+    handle_images()
+  File "/home/brandmcd/image-hosting/download_images.py", line 105, in handle_images
+    images = list_images(service)
+             ^^^^^^^^^^^^^^^^^^^^
+  File "/home/brandmcd/image-hosting/download_images.py", line 36, in list_images
+    results = drive_service.files().list(q=query, fields="files(id, name)").execute()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/brandmcd/image-hosting/venv/lib/python3.11/site-packages/googleapiclient/_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/brandmcd/image-hosting/venv/lib/python3.11/site-packages/googleapiclient/http.py", line 938, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/drive/v3/files?q=%27None%27+in+parents+and+mimeType+contains+%27image%2F%27&fields=files%28id%2C+name%29&alt=json returned "File not found: .". Details: "[{'message': 'File not found: .', 'domain': 'global', 'reason': 'notFound', 'location': 'fileId', 'locationType': 'parameter'}]">
