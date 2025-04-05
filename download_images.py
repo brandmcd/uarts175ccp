@@ -15,7 +15,7 @@ FOLDER_ID = '1j6tBoQwV8kwOonj7ZIzlM4vVGo1toJxmcy19ZDc6R5OUCR7wDwMrukglvU3LharGgO
 
 # LED setup
 LED_PIN = board.D18
-NUM_LEDS = 30
+NUM_LEDS = 60
 BRIGHTNESS = 0.5
 pixels = neopixel.NeoPixel(LED_PIN, NUM_LEDS, brightness=BRIGHTNESS, auto_write=False)
 
@@ -65,13 +65,13 @@ def forgotten_animation():
 
 def rainbow_wheel(pos):
     if pos < 85:
-        return (255 - pos * 3, pos * 3, 0)
+        return (min(255 - pos * 3, 200), min(pos * 3, 200), 0)
     elif pos < 170:
         pos -= 85
-        return (0, 255 - pos * 3, pos * 3)
+        return (0, min(255 - pos * 3, 200), min(pos * 3, 200))
     else:
         pos -= 170
-        return (pos * 3, 0, 255 - pos * 3)
+        return (min(pos * 3, 200), 0, min(255 - pos * 3, 200))
 
 def rainbow_gradient(duration=7):
     start_time = time.time()
