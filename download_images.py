@@ -65,21 +65,21 @@ def forgotten_animation():
 
 def rainbow_wheel(pos):
     if pos < 85:
-        return (min(255 - pos * 3, 200), min(pos * 3, 200), 0)
+        return (255 - pos * 3, pos * 3, 0)
     elif pos < 170:
         pos -= 85
-        return (0, min(255 - pos * 3, 200), min(pos * 3, 200))
+        return (0, 255 - pos * 3, pos * 3)
     else:
         pos -= 170
-        return (min(pos * 3, 200), 0, min(255 - pos * 3, 200))
+        return (pos * 3, 0, 255 - pos * 3)
 
 def rainbow_gradient(duration=7):
     start_time = time.time()
     offset = 0
     while time.time() - start_time < duration:
         for i in range(NUM_LEDS):
-            color = rainbow_wheel((i * 256 // NUM_LEDS + offset) % 256)
-            pixels[i] = color
+            r, g, b = rainbow_wheel((i * 256 // NUM_LEDS + offset) % 256)
+            pixels[i] = (int(r * 0.5), int(g * 0.5), int(b * 0.5))
         pixels.show()
         time.sleep(0.05)
         offset = (offset + 1) % 256
@@ -91,7 +91,7 @@ def fade_out(steps=60):
         brightness = step / steps
         for i in range(NUM_LEDS):
             r, g, b = pixels[i]
-            pixels[i] = (int(r * brightness), int(g * brightness), int(b * brightness))
+            pixels[i] = (int(r * brightness * 0.5), int(g * brightness * 0.5), int(b * brightness * 0.5))
         pixels.show()
         time.sleep(0.1)
     clear_leds()
@@ -124,10 +124,12 @@ def handle_images():
             if random.random() < 0.5:
                 dst = os.path.join(forgotten_path, prev_file)
                 print(f"Moved {prev_file} to Forgotten")
+                time.sleep(1)
                 forgotten_animation()
             else:
                 dst = os.path.join(monitor2_path, prev_file)
                 print(f"Moved {prev_file} to Monitor 2")
+                time.sleep(1)
                 remembered_animation()
             os.rename(src, dst)
 
