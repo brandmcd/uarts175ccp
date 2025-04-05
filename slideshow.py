@@ -47,7 +47,7 @@ def display_slideshow(directory):
                     print(f"Error displaying {img_file}: {e}")
         else:
             print("No images to display.")
-        root.after(30000)
+            root.after(30000)
 
 if __name__ == "__main__":
     display_slideshow('./images/monitor2')
