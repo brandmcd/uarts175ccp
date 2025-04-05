@@ -59,7 +59,7 @@ def forgotten_animation():
     for i in reversed(range(end_index)):
         pixels[i] = (255, 0, 0)
         pixels.show()
-        time.sleep(0.1)
+        time.sleep(0.2)
     time.sleep(0.5)
     clear_leds()
 
@@ -73,7 +73,7 @@ def rainbow_wheel(pos):
         pos -= 170
         return (pos * 3, 0, 255 - pos * 3)
 
-def rainbow_gradient(duration=15):
+def rainbow_gradient(duration=7):
     start_time = time.time()
     offset = 0
     while time.time() - start_time < duration:
@@ -93,7 +93,7 @@ def fade_out(steps=60):
             r, g, b = pixels[i]
             pixels[i] = (int(r * brightness), int(g * brightness), int(b * brightness))
         pixels.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
     clear_leds()
 
 def remembered_animation():
@@ -107,7 +107,6 @@ def remembered_animation():
 def handle_images():
     service = authenticate_drive()
     images = list_images(service)
-
     for image in images:
         file_id = image['id']
         file_name = image['name']
@@ -135,10 +134,8 @@ def handle_images():
         # Download new image to monitor1
         download_image(service, file_id, file_name, monitor1_path)
         print(f"Downloaded {file_name} to Monitor 1")
-        break  # Only handle one new image per cycle
+        handle_images()  # Only handle one new image per cycle
 
 if __name__ == "__main__":
     while True:
         handle_images()
-        print("Checking for new images in 30 seconds...")
-        time.sleep(30)
