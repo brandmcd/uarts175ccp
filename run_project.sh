@@ -39,15 +39,15 @@ fi
 
 # Start the image download service
 echo "Starting image download service..."
-python download_images.py &
+sudo ./venv/bin/python3 download_images.py &
 
 # Start Monitor 1 display
 echo "Starting display on Monitor 1..."
-env DISPLAY=:0 python display.py &
+env DISPLAY=:0 python3 display.py &
 
 # Start Monitor 2 slideshow
 echo "Starting slideshow on Monitor 2..."
-env DISPLAY=:0 python slideshow.py &
+env DISPLAY=:0 python3 slideshow.py &
 
 echo "Project is running. Press Ctrl+C to stop."
 
