@@ -11,7 +11,7 @@ import neopixel
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 SERVICE_ACCOUNT_FILE = 'credentials.json'
-FOLDER_ID = os.getenv('GOOGLE_DRIVE_FOLDER_ID')
+FOLDER_ID = '1j6tBoQwV8kwOonj7ZIzlM4vVGo1toJxmcy19ZDc6R5OUCR7wDwMrukglvU3LharGgOAn2gt1'
 
 # LED setup
 LED_PIN = board.D18
